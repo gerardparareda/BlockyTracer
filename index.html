@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta name="description" content="Real time blocker light ray tracer">
+    <meta name="author" content="Gerard Parareda & Roger Cecilia">
+    <title>Block Tracer</title>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet"> 
+    <link type="text/css" rel="stylesheet" href="css/main.css">
+    <script src="js/stats.min.js"></script>
+    <script src="js/three.min.js"></script>
+    <script src="js/OrbitControls.js"></script>
+    <script src="js/PointerLockControls.js"></script>
+    <script src="js/OBJLoader.js"></script>
+    <script src="js/jscolor.js"></script>
+</head>
+<body style="margin: 0; padding:0">
+    <div id="blocker">
+
+        <div id="instructions">
+            <span style="font-size:36px">Click to play</span>
+            <br /><br />
+            This is a real time block (direct light only) ray tracer!<br/><br/>
+            Move: WASD<br/>
+            Jump: SPACE<br/>
+            Look: MOUSE<br/>
+            Place block: LEFT MOUSE<br/>
+            Remove block: RIGHT MOUSE<br/>
+            Change block: NUMBERS (1-9)/SCROLLWHEEL<br/>
+            Change selected block color: Q<br/>
+            Change renderer speed (0 or 1): U/J<br/>
+            Menu and controls: ESC
+        </div>
+
+    </div>
+
+    <div id="crosshair" class = "noselect">
+        <img src="assets/crosshair.png">
+    </div>
+
+    <div id = "stopPickingColor"></div>
+    <div id = "pickerUI" class = "noselect colorpick">
+        
+        <h1 class = "colorpickText noselect">Select a color!</h1>
+        <input id = "colorPicker" onchange="updateGameColor(this.jscolor)" class="jscolor {position:'top', closable:true, onFineChange:'updateUIColors(this)', shadow:false, borderWidth:0, backgroundColor:'transparent'}" value="ab2567">
+
+    </div>
+
+    <div id="textdiv" class = "noselect"><h1 id="text">Solid</h1></div>
+    <div id="ui" class = "noselect">
+            <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" class = "inventoryItem itemSolid itemSelected" viewBox="0 0 110.9 128">
+                <title>solidTile</title>
+                <path id="Solid" class="s-cls-1" d="M110.85,32.05h.05L55.45,0,0,32V96l55.4,32,55.45-32V32.05M55.4,64Z" transform="translate(0 0)"/>
+                <path id="ShadingSide" class="s-cls-2" d="M56.45,127.45,110.9,96V34L56.45,65.45Z" transform="translate(0 0)"/>
+                <path id="ShadingTop" class="s-cls-3" d="M110.9,32,55.45,0,0,32,55.45,64Z" transform="translate(0 0)"/>
+                <path id="ShadingEdges" class="s-cls-4" d="M110.9,34V32L55.45,64,0,32v2L54.45,65.45v62l1,.55,1-.55v-62Z" transform="translate(0 0)"/>
+            </svg>
+            <svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" class = "inventoryItem" viewBox="0 0 110.9 128">
+                <title>glassTile</title>
+                <path id="Glass" class="g-cls-1" d="M110.85,32.05h.05L55.45,0,0,32V96l55.4,32,55.45-32V32.05M55.4,64Z" transform="translate(0 0)"/>
+                <path id="ShadingSide" class="s-cls-2" d="M56.45,127.45,110.9,96V34L56.45,65.45Z" transform="translate(0 0)"/>
+                <path id="ShadingTop" class="s-cls-3" d="M110.9,32,55.45,0,0,32,55.45,64Z" transform="translate(0 0)"/>
+                <path id="ShadingEdges" class="s-cls-4" d="M110.9,34V32L55.45,64,0,32v2L54.45,65.45v62l1,.55,1-.55v-62Z" transform="translate(0 0)"/>
+            </svg>
+            <svg id="Layer_3" data-name="Layer 3" xmlns="http://www.w3.org/2000/svg" class = "inventoryItem" viewBox="0 0 110.9 128">
+                <title>lightTile</title>
+                <path id="Light" class="l-cls-1" d="M110.85,32.05h.05L55.45,0,0,32V96l55.4,32,55.45-32V32.05M55.4,64Z" transform="translate(0 0)"/>
+                <path id="ShadingSide" class="s-cls-2" d="M56.45,127.45,110.9,96V34L56.45,65.45Z" transform="translate(0 0)"/>
+                <path id="ShadingTop" class="s-cls-3" d="M110.9,32,55.45,0,0,32,55.45,64Z" transform="translate(0 0)"/>
+                <path id="ShadingEdges" class="s-cls-4" d="M110.9,34V32L55.45,64,0,32v2L54.45,65.45v62l1,.55,1-.55v-62Z" transform="translate(0 0)"/>
+            </svg>
+    </div>
+
+    <div id="debug" class = "noselect">
+        Text
+    </div>
+<script src="js/scene.js"></script>
+</body>
+</html>
