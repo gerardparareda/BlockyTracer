@@ -50,6 +50,7 @@ var pickingColor = false;
 var stopPickingColor;
 var uiPickingColor;
 var crosshair;
+var redoIlumination = false;
 
 init();
 
@@ -196,11 +197,16 @@ function init() {
                 if(controls.isLocked) pickColor();
                 break;
             case 85:
-                renderType = Math.max(1, renderType++);
+                renderType = Math.min(2, ++renderType);
+                restartIlumination();
                 console.log("Change render type");
                 break;
             case 74:
-                renderType = Math.min(0, renderType--);
+                renderType = Math.max(0, --renderType);
+                if(renderType == 1){
+                    redoIlumination = true;
+                }
+                restartIlumination();
                 console.log("Change render type");
                 break;
         }
@@ -248,6 +254,7 @@ function init() {
     changeColor("glass", 0x0099ff);
     changeColor("light", 0xffcc00);
 
+    updateUIColors("f4c542");
     //Generate terrain
     //createStructure();
 
@@ -334,7 +341,12 @@ function changeFaceColor(block, face){
     var newIntensity = block.lightShades[face];
     var newColor = new THREE.Color(block.shadeColor[face].r, block.shadeColor[face].g, block.shadeColor[face].b);
 
-    newColor = new THREE.Color((block.material.color.r + newColor.r) * newIntensity, (block.material.color.r + newColor.g) * newIntensity, (block.material.color.r + newColor.b) * newIntensity);
+    if(renderType == 2){
+        newColor = new THREE.Color(block.material.color.r, block.material.color.g, block.material.color.b);
+    } else {
+        newColor = new THREE.Color((block.material.color.r + newColor.r) * newIntensity, (block.material.color.r + newColor.g) * newIntensity, (block.material.color.r + newColor.b) * newIntensity);
+
+    }
 
     var geometry = block.geometry;
     switch(face){
@@ -471,7 +483,8 @@ function iluminateScene(){
             iterLightBlock = lightBlocks.length - 1;
             
             if(typeof sB !== 'undefined'){
-                if( sB.lightShades[iterNoLightFace] != tmpIl  || !(sB.shadeColor[iterNoLightFace].r == lightFaceColor.r && sB.shadeColor[iterNoLightFace].g == lightFaceColor.g && sB.shadeColor[iterNoLightFace].b == lightFaceColor.b)){                
+                //sB.lightShades[iterNoLightFace] != tmpIl  || 
+                if( redoIlumination ||  !(sB.shadeColor[iterNoLightFace].r == lightFaceColor.r && sB.shadeColor[iterNoLightFace].g == lightFaceColor.g && sB.shadeColor[iterNoLightFace].b == lightFaceColor.b)){                
                     sB.lightShades[iterNoLightFace] = tmpIl;
                     sB.shadeColor[iterNoLightFace] = new THREE.Color(lightFaceColor.r, lightFaceColor.g, lightFaceColor.b);
                     //console.log(iterNoLightFace + " " + sB.lightShades[iterNoLightFace] + ", c: " + lightFaceColor.getHexString());
@@ -505,8 +518,9 @@ function iluminateScene(){
                 }
 
                 //Canvi de bloc no llum
-                if(iterNoLightBlock == -1){
+                if(iterNoLightBlock <= -1){
                     iluminationEnded = true;
+                    redoIlumination = false;
                 }
             }
         }
@@ -576,7 +590,7 @@ function iluminateScene2(){
             iterLightFace = 0;
             iterLightBlock = lightBlocks.length - 1;
             
-            if( sB.lightShades[iterNoLightFace] != tmpIl  || !(sB.shadeColor[iterNoLightFace].r == lightFaceColor.r && sB.shadeColor[iterNoLightFace].g == lightFaceColor.g && sB.shadeColor[iterNoLightFace].b == lightFaceColor.b)){                
+            if( redoIlumination || sB.lightShades[iterNoLightFace] != tmpIl  || !(sB.shadeColor[iterNoLightFace].r == lightFaceColor.r && sB.shadeColor[iterNoLightFace].g == lightFaceColor.g && sB.shadeColor[iterNoLightFace].b == lightFaceColor.b)){                
                 sB.lightShades[iterNoLightFace] = tmpIl;
                 sB.shadeColor[iterNoLightFace] = new THREE.Color(lightFaceColor.r, lightFaceColor.g, lightFaceColor.b);
                 console.log(iterNoLightFace + " " + sB.lightShades[iterNoLightFace] + ", c: " + lightFaceColor.getHexString());
@@ -607,14 +621,23 @@ function iluminateScene2(){
                 }
 
                 //Canvi de bloc no llum
-                if(iterNoLightBlock == -1){
+                if(iterNoLightBlock <= -1){
                     iluminationEnded = true;
+                    redoIlumination = false;
                 }
             }
         }
     }
 }
 
+function iluminateScene3(){
+    for(var b = 0; b < blocks.length; b++){
+        iluminateBlock(blocks[b]);
+    }
+    
+    iluminationEnded = true;
+    
+}
 
 function normalizeLightDistance(distance){
     return (1 - distance / (lightKey2))/lightKey;
@@ -920,7 +943,7 @@ function mouseClick(button){
         } else if(button == 2){
             deleteBlock(elm);
             restartIlumination();
-        }   
+        }
     } else if(intersec2.length > 0 && intersec2[0].object.typeObject == "floor"){
         if(button == 0){
             var posX = Math.round(intersec2[0].point.x/5);
@@ -1055,8 +1078,10 @@ function animate() {
         if(!iluminationEnded){
             if(renderType == 1 ){
                 iluminateScene();
-            } else {
+            } else if(renderType == 0){
                 iluminateScene2();
+            } else if(renderType == 2){
+                iluminateScene3();
             }
             
         }
@@ -1085,7 +1110,7 @@ function animate() {
         "<br>DirectionY: " + direction.y + "<br>DirecitonZ: " + direction.z +  
         "<br>VelocityX: " + velocity.x + " <br>VelocityY: " + velocity.y + "<br>VelocityZ: " + velocity.z +
         "<br>Type: " + type + "<br>Renderer: " + renderType + "<br>On Object: " + onObject + "<br>Can Jump: " + canJump;
-    //debug.style.visibility = "visible";
+    debug.style.visibility = "visible";
     
 }
 
