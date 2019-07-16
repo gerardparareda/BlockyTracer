@@ -32,7 +32,8 @@ With the ```rendertype``` 3 there's no raytracing, it paints everything it's own
 
 ## Example video
 
-<a href="http://www.youtube.com/watch?feature=player_embedded&v=M-IMUY6wN28" target="_blank"></a>
+<a href="http://www.youtube.com/watch?feature=player_embedded&v=M-IMUY6wN28" target="_blank"><img src="http://img.youtube.com/vi/M-IMUY6wN28/0.jpg" 
+alt="Example Video" width="240" height="180" border="10" /></a>
 
 ## About
 Made by [Gerard Parareda](https://gerardparareda.github.io/) and [Roger Cecilia (rceci64)](https://github.com/rceci64/rceci64) in 2019 under the MIT license. Feel free to make your own version.
