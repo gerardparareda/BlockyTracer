@@ -256,7 +256,7 @@ function init() {
 
     updateUIColors("f4c542");
     //Generate terrain
-    //createStructure();
+    createStructure();
 
     //Spawn player above floor
     controls.getObject().position.y = 10;
@@ -1118,11 +1118,11 @@ function createStructure(){
 
     type = "light";
     
-    createBlock(-4,1,1,false);
-    createBlock(2,1,-3,false);
+    //createBlock(-4,1,1,false);
+    createBlock(1,1,-3,false);
 
     type = "solid";
-    for(var y = -5; y < 6; y++){
+    /*for(var y = -5; y < 6; y++){
         for(var x = -5; x < 6; x++){
             createBlock(x,0,y,false);
         }
@@ -1132,9 +1132,9 @@ function createStructure(){
         for(var x = -5; x < 6; x++){
             createBlock(x,y,5,false);
         }
-    }
+    }*/
 
-    for(var y = 1; y < 6; y++){
+    for(var y = 0; y < 6; y++){
         for(var x = -5; x < 6; x++){
             createBlock(5,y,x,false);
         }
@@ -1142,7 +1142,7 @@ function createStructure(){
 
     type = "glass";
 
-    for(var y = 2; y < 4; y++){
+    for(var y = 1; y < 3; y++){
         for(var x = 0; x < 4; x++){
             createBlock(x,y,1,false);
             createBlock(x,y,2,false);
