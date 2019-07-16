@@ -1,6 +1,8 @@
 # BlockyTracer
 
 This is a 3D browser voxel editor with a ray tracer capabilities implemented. Entirely made with pure Javascript and THREEJS.
+<img src="https://raw.githubusercontent.com/gerardparareda/BlockyTracer/master/examples/example.png" 
+alt="Blocky Tracer" width="720"/>
 
 ## How to run
 1. Install python 2.7
@@ -31,5 +33,7 @@ With the ```rendertype``` 3 there's no raytracing, it paints everything it's own
 ## Example video
 
 <a href="http://www.youtube.com/watch?feature=player_embedded&v=M-IMUY6wN28
-" target="_blank"><img src="http://img.youtube.com/vi/M-IMUY6wN28/0.jpg" 
-alt="Example video" width="720"  /></a>
+" target="_blank"></a>
+
+## About
+Made by [Gerard Parareda](https://gerardparareda.github.io/) and [Roger Cecilia (rceci64)](https://github.com/rceci64/rceci64) in 2019 under the MIT license. Feel free to make your own version.
